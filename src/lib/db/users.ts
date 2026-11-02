@@ -13,8 +13,9 @@ export async function createUser(u: User) {
         ],
       })
     );
-  } catch (e: any) {
-    if (e.name === "TransactionCanceledException") throw new AppError(409, "Email already registered");
+    } catch (e) {
+    if (e instanceof Error && e.name === "TransactionCanceledException")
+      throw new AppError(409, "Email already registered");
     throw e;
   }
 }

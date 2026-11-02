@@ -13,7 +13,7 @@ const registerSchema = z.object({
 });
 const loginSchema = registerSchema.pick({ email: true, password: true });
 
-export const publicUser = ({ passwordHash, ...u }: User) => u;
+export const publicUser = ({ id, name, email, role, createdAt }: User) => ({ id, name, email, role, createdAt });
 
 export async function register(input: unknown) {
   const d = registerSchema.parse(input);
