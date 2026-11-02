@@ -2,6 +2,7 @@ import { GetCommand, TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb, TABLE } from "./client";
 import { AppError } from "@/utils/errors";
 import type { User } from "@/types";
+import { clean } from "./util";
 
 export async function createUser(u: User) {
   try {
@@ -22,7 +23,7 @@ export async function createUser(u: User) {
 
 export async function getUserById(id: string) {
   const r = await ddb.send(new GetCommand({ TableName: TABLE, Key: { PK: `USER#${id}`, SK: "PROFILE" } }));
-  return (r.Item as User) ?? null;
+  return r.Item ? clean<User>(r.Item) : null;
 }
 
 export async function getUserByEmail(email: string) {
