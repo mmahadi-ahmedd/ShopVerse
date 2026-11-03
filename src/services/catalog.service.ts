@@ -26,7 +26,7 @@ const productSchema = z.object({
   price: z.number().positive().max(10_000_000),
   stock: z.number().int().min(0),
   categoryId: z.string().min(1),
-  images: z.array(z.string().url()).max(6).default([]),
+  images: z.array(z.string().url().startsWith(process.env.CDN_URL!)).max(6).default([]),
 });
 
 async function ownedProduct(s: Session, id: string) {

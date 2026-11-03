@@ -1,4 +1,4 @@
-import { PutCommand, GetCommand, DeleteCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { BatchGetCommand, PutCommand, GetCommand, DeleteCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { ddb, TABLE } from "./client";
 import { clean } from "./util";
 import type { Product } from "@/types";
@@ -18,6 +18,15 @@ export const putProduct = (p: Product) =>
 export async function getProduct(id: string) {
   const r = await ddb.send(new GetCommand({ TableName: TABLE, Key: { PK: `PRODUCT#${id}`, SK: "META" } }));
   return r.Item ? clean<Product>(r.Item) : null;
+}
+
+export async function getProductsByIds(ids: string[]) {
+  const unique = [...new Set(ids)].slice(0, 100);
+  if (!unique.length) return [];
+  const r = await ddb.send(new BatchGetCommand({
+    RequestItems: { [TABLE]: { Keys: unique.map((id) => ({ PK: `PRODUCT#${id}`, SK: "META" })) } },
+  }));
+  return (r.Responses?.[TABLE] ?? []).map((i) => clean<Product>(i));
 }
 
 export const deleteProduct = (id: string) =>
