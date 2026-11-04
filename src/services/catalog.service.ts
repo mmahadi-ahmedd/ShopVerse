@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { putCategory, listCategories, getCategory } from "@/lib/db/categories";
+import {deleteCategory, putCategory, listCategories, getCategory } from "@/lib/db/categories";
 import { putProduct, getProduct, deleteProduct as delProduct, queryProducts } from "@/lib/db/products";
 import { slugify } from "@/utils/slug";
 import { AppError } from "@/utils/errors";
@@ -64,6 +64,12 @@ export async function getProductDetail(id: string) {
   if (!product) throw new AppError(404, "Product not found");
   const rel = await queryProducts({ index: "GSI2", pk: `CAT#${product.categoryId}`, limit: 5 });
   return { product, related: rel.items.filter((p) => p.id !== id).slice(0, 4) };
+}
+
+export async function removeCategory(id: string) {
+  const { items } = await queryProducts({ index: "GSI2", pk: `CAT#${id}`, limit: 1 });
+  if (items.length) throw new AppError(409, "Category still has products");
+  await deleteCategory(id);
 }
 
 export function listProducts(sp: URLSearchParams) {

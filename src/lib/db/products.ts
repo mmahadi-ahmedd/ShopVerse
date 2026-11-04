@@ -29,6 +29,20 @@ export async function getProductsByIds(ids: string[]) {
   return (r.Responses?.[TABLE] ?? []).map((i) => clean<Product>(i));
 }
 
+export async function countProducts(index: "GSI1" | "GSI2" | "GSI3", pk: string) {
+  let n = 0;
+  let key: Record<string, unknown> | undefined;
+  do {
+    const r = await ddb.send(new QueryCommand({
+      TableName: TABLE, IndexName: index, Select: "COUNT",
+      KeyConditionExpression: `${index}PK = :pk`, ExpressionAttributeValues: { ":pk": pk }, ExclusiveStartKey: key,
+    }));
+    n += r.Count ?? 0;
+    key = r.LastEvaluatedKey;
+  } while (key);
+  return n;
+}
+
 export const deleteProduct = (id: string) =>
   ddb.send(new DeleteCommand({ TableName: TABLE, Key: { PK: `PRODUCT#${id}`, SK: "META" } }));
 
