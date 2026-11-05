@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
+import BackButton from "./BackButton";
 
 export default function DashboardShell({ title, links, children }: {
   title: string; links: { href: string; label: string }[]; children: React.ReactNode;
@@ -20,7 +21,9 @@ export default function DashboardShell({ title, links, children }: {
           ))}
         </nav>
       </aside>
-      <main className="min-w-0 flex-1 p-4 md:p-8">{children}</main>
+      <main className="min-w-0 flex-1 p-4 md:p-8">
+        <BackButton />
+        {children}</main>
     </div>
   );
 }

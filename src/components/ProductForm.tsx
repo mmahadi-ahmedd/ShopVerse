@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import ImageUploader from "./ImageUploader";
 import type { Category, Product } from "@/types";
+import CategoryPicker from "./CategoryPicker";
 
 export default function ProductForm({ categories, initial }: { categories: Category[]; initial?: Product }) {
   const router = useRouter();
@@ -15,9 +16,10 @@ export default function ProductForm({ categories, initial }: { categories: Categ
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    if (!f.get("categoryId")) { setError("Please select a category"); return; }
     setBusy(true);
     setError("");
-    const f = new FormData(e.currentTarget);
     const body = {
       title: f.get("title"), description: f.get("description"),
       price: Number(f.get("price")), stock: Number(f.get("stock")),
@@ -42,10 +44,7 @@ export default function ProductForm({ categories, initial }: { categories: Categ
         <input name="price" type="number" step="0.01" min="0.01" defaultValue={initial?.price} placeholder="Price" required className={field} />
         <input name="stock" type="number" min="0" step="1" defaultValue={initial?.stock ?? 0} placeholder="Stock" required className={field} />
       </div>
-      <select name="categoryId" defaultValue={initial?.categoryId ?? ""} required className={field}>
-        <option value="" disabled>Select category</option>
-        {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-      </select>
+      <CategoryPicker categories={categories} defaultValue={initial?.categoryId ?? ""} />
       <ImageUploader value={images} onChange={setImages} />
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button disabled={busy} className="rounded bg-black px-5 py-2 text-white disabled:opacity-50">

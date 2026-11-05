@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import { listProducts } from "@/services/catalog.service";
 import { listCategories } from "@/lib/db/categories";
 import { getWishIds } from "@/lib/wishIds";
+import CategoryPicker from "@/components/CategoryPicker";
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
@@ -20,10 +21,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
     <div className="space-y-6">
       <form className="flex flex-wrap gap-2">
         <input name="q" defaultValue={sp.q} placeholder="Search products…" className={`${input} min-w-48 flex-1`} />
-        <select name="category" defaultValue={sp.category ?? ""} className={input}>
-          <option value="">All categories</option>
-          {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
+        <CategoryPicker categories={categories} name="category" defaultValue={sp.category ?? ""} allLabel="All categories" />
         <input name="min" type="number" min={0} defaultValue={sp.min} placeholder="Min $" className={`${input} w-24`} />
         <input name="max" type="number" min={0} defaultValue={sp.max} placeholder="Max $" className={`${input} w-24`} />
         <button className="rounded bg-black px-4 py-2 text-sm text-white">Filter</button>
