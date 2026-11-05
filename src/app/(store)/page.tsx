@@ -3,11 +3,14 @@ import ProductCard from "@/components/ProductCard";
 import { listProducts } from "@/services/catalog.service";
 import { listCategories } from "@/lib/db/categories";
 import { getWishIds } from "@/lib/wishIds";
+import { withDiscounts } from "@/services/discount.service";
 
 export default async function Home() {
   const [{ items }, categories, wished] = await Promise.all([
     listProducts(new URLSearchParams({ limit: "8" })), listCategories(), getWishIds(),
   ]);
+
+  const products = await withDiscounts(items);
   return (
     <div className="space-y-10">
       <section className="rounded-2xl bg-gradient-to-r from-black to-gray-700 px-6 py-14 text-white">
@@ -29,11 +32,11 @@ export default async function Home() {
 
       <section>
         <h2 className="mb-3 text-xl font-semibold">Latest products</h2>
-        {items.length === 0 ? (
+        {products.length === 0 ? (
           <p className="text-gray-500">No products yet. Check back soon.</p>
         ) : (
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {items.map((p) => <ProductCard key={p.id} p={p} wished={wished.has(p.id)} />)}
+            {products.map((p) => <ProductCard key={p.id} p={p} wished={wished.has(p.id)} />)}
           </div>
         )}
       </section>

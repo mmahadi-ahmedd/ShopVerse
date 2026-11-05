@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import AddToCart from "@/components/AddToCart";
+import Countdown from "@/components/Countdown";
+import LocalTime from "@/components/LocalTime";
 import ProductCard from "@/components/ProductCard";
 import WishlistButton from "@/components/WishlistButton";
 import { getProductDetail } from "@/services/catalog.service";
+import { withDiscounts } from "@/services/discount.service";
 import { getCategory } from "@/lib/db/categories";
 import { getSession } from "@/lib/auth";
 import { getWishIds } from "@/lib/wishIds";
@@ -12,11 +15,14 @@ import { money } from "@/utils/format";
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { product: p, related } = await getProductDetail(id).catch((e) => {
+  const detail = await getProductDetail(id).catch((e) => {
     if (e instanceof AppError && e.status === 404) notFound();
     throw e;
   });
-  const [session, wished, category] = await Promise.all([getSession(), getWishIds(), getCategory(p.categoryId)]);
+  const [[p], related, session, wished, category] = await Promise.all([
+    withDiscounts([detail.product]), withDiscounts(detail.related),
+    getSession(), getWishIds(), getCategory(detail.product.categoryId),
+  ]);
 
   return (
     <div className="space-y-12">
@@ -28,6 +34,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             ) : (
               <div className="flex h-full items-center justify-center text-gray-400">No image</div>
             )}
+            {p.discount && <span className="absolute left-3 top-3 rounded bg-rose-600 px-2.5 py-1 text-sm font-bold text-white">-{p.discount.percent}%</span>}
             <WishlistButton productId={p.id} initial={wished.has(p.id)} />
           </div>
           {p.images.length > 1 && (
@@ -44,7 +51,27 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         <div className="space-y-4">
           {category && <p className="text-sm text-gray-500">{category.name}</p>}
           <h1 className="text-3xl font-bold">{p.title}</h1>
-          <p className="text-2xl">{money(p.price)}</p>
+
+          <div className="flex flex-wrap items-baseline gap-3">
+            <span className={`text-3xl font-bold ${p.discount ? "text-rose-600" : ""}`}>{money(p.finalPrice)}</span>
+            {p.discount && (
+              <>
+                <span className="text-lg text-gray-400 line-through">{money(p.price)}</span>
+                <span className="rounded bg-rose-600 px-2 py-0.5 text-sm font-semibold text-white">Save {p.discount.percent}%</span>
+              </>
+            )}
+          </div>
+
+          {p.discount && (
+            <div className="space-y-2 rounded-xl border border-rose-200 bg-rose-50 p-4">
+              <p className="font-semibold text-rose-700">{p.discount.title || `${p.discount.percent}% OFF`} · ends in</p>
+              <Countdown endsAt={p.discount.endsAt} />
+              <p className="text-xs text-gray-600">
+                Offer valid <LocalTime iso={p.discount.startsAt} /> → <LocalTime iso={p.discount.endsAt} />
+              </p>
+            </div>
+          )}
+
           <p className="whitespace-pre-line text-gray-700">{p.description}</p>
           <p className="text-sm text-gray-500">{p.stock > 0 ? `${p.stock} in stock` : ""}</p>
           {(!session || session.role === "user") && <AddToCart productId={p.id} stock={p.stock} />}

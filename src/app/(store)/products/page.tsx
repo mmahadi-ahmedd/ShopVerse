@@ -4,6 +4,8 @@ import { listProducts } from "@/services/catalog.service";
 import { listCategories } from "@/lib/db/categories";
 import { getWishIds } from "@/lib/wishIds";
 import CategoryPicker from "@/components/CategoryPicker";
+import { withDiscounts } from "@/services/discount.service";
+
 
 export default async function ProductsPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const sp = await searchParams;
@@ -11,6 +13,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
   const [{ items, nextCursor }, categories, wished] = await Promise.all([
     listProducts(params), listCategories(), getWishIds(),
   ]);
+  const products = await withDiscounts(items);
 
   const base = new URLSearchParams(params);
   base.delete("cursor");
@@ -27,14 +30,11 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         <button className="rounded bg-black px-4 py-2 text-sm text-white">Filter</button>
       </form>
 
-      {items.length === 0 ? (
-        <div className="py-20 text-center">
-          <p className="text-lg font-medium">No products found</p>
-          <Link href="/products" className="mt-2 inline-block text-sm underline">Clear filters</Link>
-        </div>
+      {products.length === 0 ? (
+        <div className="py-20 text-center">...</div>
       ) : (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {items.map((p) => <ProductCard key={p.id} p={p} wished={wished.has(p.id)} />)}
+          {products.map((p) => <ProductCard key={p.id} p={p} wished={wished.has(p.id)} />)}
         </div>
       )}
 

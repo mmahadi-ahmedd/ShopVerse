@@ -4,12 +4,13 @@ import ProductCard from "@/components/ProductCard";
 import { getSession } from "@/lib/auth";
 import { getWishlist } from "@/services/cart.service";
 import type { Product } from "@/types";
+import { withDiscounts } from "@/services/discount.service";
 
 export default async function WishlistPage() {
   const s = await getSession();
   if (!s) redirect("/login");
   if (s.role !== "user") redirect("/");
-  const items = (await getWishlist(s.sub)).items.filter((p): p is Product => !!p);
+ const items = await withDiscounts((await getWishlist(s.sub)).items.filter((p): p is Product => !!p));
 
   return (
     <div className="space-y-4">

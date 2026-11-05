@@ -10,4 +10,10 @@ export interface Product {
   title: string; slug: string; description: string;
   price: number; stock: number; images: string[]; createdAt: string;
 }
+export interface Discount {
+  id: string; sellerId: string; productId: string; percent: number;
+  title?: string; image: string; startsAt: string; endsAt: string; createdAt: string;
+}
+export type DiscountInfo = Pick<Discount, "id" | "percent" | "startsAt" | "endsAt" | "image" | "title">;
+export interface ProductView extends Product { finalPrice: number; discount?: DiscountInfo }
 export interface CartItem { productId: string; quantity: number; price: number; title: string; image?: string; }

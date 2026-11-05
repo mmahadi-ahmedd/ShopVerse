@@ -2,6 +2,7 @@ import { z } from "zod";
 import { getProduct, getProductsByIds } from "@/lib/db/products";
 import { putEntry, getEntry, listEntries, deleteEntry } from "@/lib/db/userLists";
 import { AppError } from "@/utils/errors";
+import { activeDiscountMap, finalPrice } from "./discount.service";
 
 const MAX_QTY = 10;
 const MAX_LINES = 50;
@@ -25,12 +26,13 @@ function checkStock(total: number, stock: number) {
 export async function getCart(userId: string) {
   const entries = await listEntries<CartEntry>(userId, "CART");
   const map = new Map((await getProductsByIds(entries.map((e) => e.productId))).map((p) => [p.id, p]));
+  const discounts = await activeDiscountMap();
   const items = entries.map((e) => {
     const p = map.get(e.productId);
     return {
       productId: e.productId, quantity: e.quantity,
       title: p?.title ?? "Unavailable product", slug: p?.slug ?? null,
-      price: p?.price ?? 0, image: p?.images[0] ?? null,
+      price: p ? (discounts.get(p.id) ? finalPrice(p.price, discounts.get(p.id)!.percent) : p.price) : 0,
       stock: p?.stock ?? 0, available: !!p && p.stock >= e.quantity,
     };
   });
