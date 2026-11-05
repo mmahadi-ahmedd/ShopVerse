@@ -3,16 +3,19 @@ import ProductCard from "@/components/ProductCard";
 import { listProducts } from "@/services/catalog.service";
 import { listCategories } from "@/lib/db/categories";
 import { getWishIds } from "@/lib/wishIds";
-import { withDiscounts } from "@/services/discount.service";
+import { getFeaturedOffer, withDiscounts } from "@/services/discount.service";
+import OfferModal from "@/components/OfferModal";
+
 
 export default async function Home() {
-  const [{ items }, categories, wished] = await Promise.all([
-    listProducts(new URLSearchParams({ limit: "8" })), listCategories(), getWishIds(),
+  const [{ items }, categories, wished, offer] = await Promise.all([
+    listProducts(new URLSearchParams({ limit: "8" })), listCategories(), getWishIds(), getFeaturedOffer(),
   ]);
 
   const products = await withDiscounts(items);
   return (
     <div className="space-y-10">
+      {offer && <OfferModal offer={offer} />}
       <section className="rounded-2xl bg-gradient-to-r from-black to-gray-700 px-6 py-14 text-white">
         <h1 className="text-3xl font-bold sm:text-5xl">Everything you need, one place.</h1>
         <p className="mt-3 max-w-lg text-gray-300">Discover products from independent sellers.</p>
