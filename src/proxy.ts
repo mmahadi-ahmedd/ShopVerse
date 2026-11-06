@@ -4,7 +4,7 @@ import { verifyToken, COOKIE } from "@/lib/auth";
 const GUARDS: Record<string, string> = { "/admin": "admin", "/seller": "seller", "/dashboard": "user" };
 const HOME: Record<string, string> = { admin: "/admin", seller: "/seller", user: "/dashboard" };
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const session = await verifyToken(req.cookies.get(COOKIE)?.value);
   const guard = Object.keys(GUARDS).find((p) => pathname.startsWith(p));

@@ -27,15 +27,19 @@ export async function getCart(userId: string) {
   const entries = await listEntries<CartEntry>(userId, "CART");
   const map = new Map((await getProductsByIds(entries.map((e) => e.productId))).map((p) => [p.id, p]));
   const discounts = await activeDiscountMap();
+
   const items = entries.map((e) => {
     const p = map.get(e.productId);
+    const d = p ? discounts.get(p.id) : undefined;
     return {
       productId: e.productId, quantity: e.quantity,
       title: p?.title ?? "Unavailable product", slug: p?.slug ?? null,
-      price: p ? (discounts.get(p.id) ? finalPrice(p.price, discounts.get(p.id)!.percent) : p.price) : 0,
+      price: p ? (d ? finalPrice(p.price, d.percent) : p.price) : 0,
+      image: p?.images[0] ?? null,
       stock: p?.stock ?? 0, available: !!p && p.stock >= e.quantity,
     };
   });
+
   const subtotal = Math.round(items.filter((i) => i.available).reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100;
   return { items, subtotal, count: items.reduce((n, i) => n + i.quantity, 0) };
 }
