@@ -6,6 +6,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
       { href: "/seller", label: "Overview" }, { href: "/seller/products", label: "My products" },
       { href: "/seller/products/new", label: "Add product" },
       { href: "/seller/discounts", label: "Discounts" },
+      { href: "/seller/orders", label: "Orders" }
     ]}>{children}</DashboardShell>
   );
 }

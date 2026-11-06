@@ -65,6 +65,10 @@ export async function removeFromCart(userId: string, productId: string) {
   return getCart(userId);
 }
 
+export async function clearCart(userId: string) {
+  const entries = await listEntries<CartEntry>(userId, "CART");
+  await Promise.all(entries.map((e) => deleteEntry(userId, "CART", e.productId)));
+}
 
 export async function getWishlist(userId: string) {
   const entries = await listEntries<{ productId: string }>(userId, "WISH");
