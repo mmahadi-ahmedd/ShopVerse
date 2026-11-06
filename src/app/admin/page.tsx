@@ -6,16 +6,23 @@ import { listAllOrders } from "@/lib/db/orders";
 import { money } from "@/utils/format";
 
 export default async function AdminHome() {
-  const [users, products, categories] = await Promise.all([listUsers(), listAllOrders(), countProducts("GSI1", "PRODUCTS"), listCategories()]);
+  const [users, productCount, categories, orders] = await Promise.all([
+    listUsers(),
+    countProducts("GSI1", "PRODUCTS"),
+    listCategories(),
+    listAllOrders(),
+  ]);
+
   const sold = orders.filter((o) => o.status !== "pending_payment" && o.status !== "cancelled");
   const revenue = sold.reduce((n, o) => n + o.subtotal, 0);
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Overview</h1>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
         <StatCard label="Users" value={users.filter((u) => u.role === "user").length} />
         <StatCard label="Sellers" value={users.filter((u) => u.role === "seller").length} />
-        <StatCard label="Products" value={products} />
+        <StatCard label="Products" value={productCount} />
         <StatCard label="Categories" value={categories.length} />
         <StatCard label="Orders" value={sold.length} />
         <StatCard label="Revenue" value={money(revenue)} />
