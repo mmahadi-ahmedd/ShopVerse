@@ -4,6 +4,7 @@ import StatCard from "@/components/StatCard";
 import StatusBadge from "@/components/StatusBadge";
 import { adminStats } from "@/services/stats.service";
 import { money } from "@/utils/format";
+export const dynamic = "force-dynamic";
 
 export default async function AdminHome() {
   const s = await adminStats();

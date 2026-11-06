@@ -1,5 +1,6 @@
 import CategoryManager from "@/components/CategoryManager";
 import { listCategories } from "@/lib/db/categories";
+export const dynamic = "force-dynamic";
 
 export default async function AdminCategories() {
   return (

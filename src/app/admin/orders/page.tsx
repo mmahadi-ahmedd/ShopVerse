@@ -3,6 +3,7 @@ import OrderStatusSelect from "@/components/OrderStatusSelect";
 import StatusBadge from "@/components/StatusBadge";
 import { listAllOrders } from "@/lib/db/orders";
 import { money } from "@/utils/format";
+export const dynamic = "force-dynamic";
 
 export default async function AdminOrders() {
   const orders = (await listAllOrders()).filter((o) => o.status !== "pending_payment").slice(0, 100);

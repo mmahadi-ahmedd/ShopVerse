@@ -2,6 +2,7 @@ import Link from "next/link";
 import DeleteButton from "@/components/DeleteButton";
 import { listProducts } from "@/services/catalog.service";
 import { money } from "@/utils/format";
+export const dynamic = "force-dynamic";
 
 export default async function AdminProducts() {
   const { items } = await listProducts(new URLSearchParams({ limit: "48" }));

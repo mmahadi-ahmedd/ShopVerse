@@ -1,4 +1,5 @@
 import { listUsers } from "@/lib/db/users";
+export const dynamic = "force-dynamic";
 
 export default async function AdminUsers() {
   const users = await listUsers();
