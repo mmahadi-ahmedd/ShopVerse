@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:create": "tsx --env-file=.env.local scripts/create-table.ts",
+    "db:seed": "tsx --env-file=.env.local scripts/seed-admin.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1161.0",

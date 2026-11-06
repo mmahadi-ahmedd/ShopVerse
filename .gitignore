@@ -48,3 +48,6 @@ admin.txt
 seller.txt
 user.txt
 test.png
+
+.vercel
+.env*
