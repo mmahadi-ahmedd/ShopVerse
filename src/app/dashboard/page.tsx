@@ -20,7 +20,7 @@ export default async function UserHome() {
         <StatCard label="Wishlist" value={wish.items.length} />
       </div>
       <div className="flex gap-3">
-        <Link href="/cart" className="rounded bg-black px-4 py-2 text-sm text-white">View cart</Link>
+        <Link href="/cart" className="rounded bg-brand-600 hover:bg-brand-700 px-4 py-2 text-sm text-white">View cart</Link>
         <Link href="/products" className="rounded border px-4 py-2 text-sm">Keep shopping</Link>
       </div>
     </div>

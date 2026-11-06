@@ -59,7 +59,7 @@ export default function DiscountForm({ products }: { products: { id: string; tit
         <ImageUploader value={image} onChange={setImage} max={1} />
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button disabled={busy} className="rounded bg-black px-5 py-2 text-sm text-white disabled:opacity-50">
+      <button disabled={busy} className="rounded bg-brand-600 hover:bg-brand-700 px-5 py-2 text-sm text-white disabled:opacity-50">
         {busy ? "Saving…" : "Create discount"}
       </button>
     </form>

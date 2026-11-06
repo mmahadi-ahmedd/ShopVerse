@@ -10,7 +10,7 @@ export default function DashboardShell({ title, links, children }: {
       <aside className="border-b bg-white md:min-h-screen md:w-56 md:shrink-0 md:border-b-0 md:border-r">
         <div className="flex items-center justify-between p-4 md:block">
           <div>
-            <Link href="/" className="font-bold">ShopVerse</Link>
+            <Link href="/" className="font-extrabold text-brand-600">ShopVerse</Link>
             <p className="text-xs uppercase text-gray-500">{title}</p>
           </div>
           <div className="text-sm md:mt-4"><LogoutButton /></div>

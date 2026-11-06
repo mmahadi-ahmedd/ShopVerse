@@ -108,4 +108,9 @@ export async function getFeaturedOffer() {
   };
 }
 
+export async function getDealProducts(limit = 4) {
+  const ids = [...(await activeDiscountMap()).keys()].slice(0, limit);
+  return withDiscounts(await getProductsByIds(ids));
+}
+
 export type Offer = NonNullable<Awaited<ReturnType<typeof getFeaturedOffer>>>;

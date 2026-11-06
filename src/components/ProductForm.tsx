@@ -47,7 +47,7 @@ export default function ProductForm({ categories, initial }: { categories: Categ
       <CategoryPicker categories={categories} defaultValue={initial?.categoryId ?? ""} />
       <ImageUploader value={images} onChange={setImages} />
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button disabled={busy} className="rounded bg-black px-5 py-2 text-white disabled:opacity-50">
+      <button disabled={busy} className="rounded bg-brand-600 hover:bg-brand-700 px-5 py-2 text-white disabled:opacity-50">
         {busy ? "Saving…" : initial ? "Save changes" : "Create product"}
       </button>
     </form>

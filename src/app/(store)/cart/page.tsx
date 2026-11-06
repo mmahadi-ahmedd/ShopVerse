@@ -85,7 +85,7 @@ export default function CartPage() {
             <aside className="h-fit space-y-3 rounded-xl border bg-white p-5">
                 <h2 className="font-semibold">Order summary</h2>
                 <div className="flex justify-between"><span>Subtotal</span><span className="font-semibold">{money(cart.subtotal)}</span></div>
-                <Link href="/checkout" className="block w-full rounded bg-black py-2 text-center text-white">Checkout</Link>
+                <Link href="/checkout" className="block w-full rounded bg-brand-600 hover:bg-brand-700 py-2 text-center text-white">Checkout</Link>
             </aside>
         </div>
     );

@@ -27,7 +27,7 @@ export default function CheckoutForm() {
       <input name="address" placeholder="Address" required minLength={5} className={field} />
       <input name="city" placeholder="City" required minLength={2} className={field} />
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button disabled={busy} className="w-full rounded bg-black py-2.5 text-white disabled:opacity-50">
+      <button disabled={busy} className="w-full rounded bg-brand-600 hover:bg-brand-700 py-2.5 text-white disabled:opacity-50">
         {busy ? "Redirecting to payment…" : "Pay with card"}
       </button>
       <p className="text-center text-xs text-gray-500">Secure payment by Stripe (test mode)</p>

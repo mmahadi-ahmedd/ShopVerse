@@ -41,7 +41,7 @@ export default function AuthForm({ mode }: { mode: "login" | "register" }) {
         </select>
       )}
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button disabled={busy} className="w-full rounded bg-black py-2 text-white disabled:opacity-50">
+      <button disabled={busy} className="w-full rounded bg-brand-600 hover:bg-brand-700 py-2 text-white disabled:opacity-50">
         {busy ? "Please wait…" : reg ? "Sign up" : "Log in"}
       </button>
       <p className="text-center text-sm text-gray-600">

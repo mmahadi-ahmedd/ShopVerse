@@ -27,7 +27,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Pro
         <CategoryPicker categories={categories} name="category" defaultValue={sp.category ?? ""} allLabel="All categories" />
         <input name="min" type="number" min={0} defaultValue={sp.min} placeholder="Min $" className={`${input} w-24`} />
         <input name="max" type="number" min={0} defaultValue={sp.max} placeholder="Max $" className={`${input} w-24`} />
-        <button className="rounded bg-black px-4 py-2 text-sm text-white">Filter</button>
+        <button className="rounded bg-brand-600 hover:bg-brand-700 px-4 py-2 text-sm text-white">Filter</button>
       </form>
 
       {products.length === 0 ? (

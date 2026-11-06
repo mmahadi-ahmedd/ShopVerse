@@ -33,7 +33,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
           <div className="text-5xl">✅</div>
           <h1 className="text-2xl font-bold">Payment successful</h1>
           <p className="text-gray-600">Order <b>#{order.id.slice(0, 8).toUpperCase()}</b> · {money(order.subtotal)}</p>
-          <Link href="/dashboard/orders" className="inline-block rounded bg-black px-5 py-2 text-white">View my orders</Link>
+          <Link href="/dashboard/orders" className="inline-block rounded bg-brand-600 hover:bg-brand-700 px-5 py-2 text-white">View my orders</Link>
         </>
       ) : (
         <>

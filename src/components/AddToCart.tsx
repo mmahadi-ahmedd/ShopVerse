@@ -34,7 +34,7 @@ export default function AddToCart({ productId, stock }: { productId: string; sto
           onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
           className="w-20 rounded border px-3 py-2" />
         <button onClick={add} disabled={busy}
-          className="rounded bg-black px-6 py-2 text-white disabled:opacity-50">
+          className="rounded bg-brand-600 hover:bg-brand-700 px-6 py-2 text-white disabled:opacity-50">
           {busy ? "Adding…" : "Add to cart"}
         </button>
       </div>

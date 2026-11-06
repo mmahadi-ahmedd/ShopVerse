@@ -11,7 +11,7 @@ export default async function SellerProducts() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">My products</h1>
-        <Link href="/seller/products/new" className="rounded bg-black px-4 py-2 text-sm text-white">Add product</Link>
+        <Link href="/seller/products/new" className="rounded bg-brand-600 hover:bg-brand-700 px-4 py-2 text-sm text-white">Add product</Link>
       </div>
       {items.length === 0 ? <p className="py-10 text-center text-gray-500">You haven&apos;t added any products yet.</p> : (
         <div className="overflow-x-auto rounded-xl border bg-white">

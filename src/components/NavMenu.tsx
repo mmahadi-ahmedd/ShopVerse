@@ -14,7 +14,7 @@ export default function NavMenu({ links, loggedIn }: { links: { href: string; la
         {links.map((l) => (
           <Link key={l.href} href={l.href} className="text-gray-700 hover:text-black">{l.label}</Link>
         ))}
-        {loggedIn ? <LogoutButton /> : <Link href="/register" className="rounded bg-black px-3 py-1.5 text-white">Sign up</Link>}
+        {loggedIn ? <LogoutButton /> : <Link href="/register" className="rounded bg-brand-600 hover:bg-brand-700 px-3 py-1.5 text-white">Sign up</Link>}
       </div>
 
       {/* mobile */}
@@ -33,7 +33,7 @@ export default function NavMenu({ links, loggedIn }: { links: { href: string; la
               {loggedIn ? (
                 <span onClick={close}><LogoutButton /></span>
               ) : (
-                <Link href="/register" onClick={close} className="block rounded bg-black py-2 text-center text-white">Sign up</Link>
+                <Link href="/register" onClick={close} className="block rounded bg-brand-600 hover:bg-brand-700 py-2 text-center text-white">Sign up</Link>
               )}
             </div>
           </div>
